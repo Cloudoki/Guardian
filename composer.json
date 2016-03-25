@@ -12,8 +12,8 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "cloudoki/oauth2-stack": "dev-master",
-        "cloudoki/except-io-nal": "dev-master"
+        "cloudoki/oauth2-stack": "v0.4",
+        "cloudoki/except-io-nal": "v0.4"
     },
     "autoload": {
        "psr-0": {
