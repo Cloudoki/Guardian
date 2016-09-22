@@ -1,6 +1,7 @@
 <?php namespace Cloudoki\Guardian;
 
-use Cloudoki\OaStack\Models\Oauth2AccessToken;
+use Cloudoki\Guardian\Models\User;
+use Cloudoki\Guardian\Models\Oauth2AccessToken;
 
 class Guardian
 {
@@ -128,14 +129,20 @@ class Guardian
 	 *	return count ($roles) === count (array_intersect (self::user()->getRoles ($id), $roles));
 	 *
 	 */
-	public static function hasRoles ($id, $role)
+	public static function hasRoles ($id, $roles)
 	{
-		if(!isset ($role) || !is_string ($role))
+		if (is_string ($roles))
 
-			throw new \Cloudoki\InvalidParameterException ('Invalid roletokens container type');
+			$roles = (array) $roles;
 
+		if(!isset ($roles) || !is_array ($roles))
 
-		// User vs Account rolesset
-		return in_array ($role, self::user()->getRoles ($id));
+			throw new \Cloudoki\InvalidParameterException ('Invalid roles container type');
+
+		$userRoles = User::find ($id)->getRoles ()->pluck ('slug')->all ();
+		$requiredRoles = array_unique ($roles);
+		$hasRoles = count ($requiredRoles) === count (array_intersect ($requiredRoles, $userRoles));
+
+		return $hasRoles;
 	}
 }
