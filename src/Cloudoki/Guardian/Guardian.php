@@ -27,7 +27,7 @@ class Guardian
 			($accountid && !self::accountRelation ($token, $accountid)) ||
 
 			// Has the user the required roles for the account?
-			($accountid && count($roles) && !self::hasRoles ($accountid, $roles))
+			($accountid && count($roles) && !self::hasRoles ($token, $roles))
 		);
 	}
 
@@ -120,8 +120,8 @@ class Guardian
 	 *	Has Roles
 	 *	Make sure the user has all the required roles for the related account.
 	 *
-	 *  @param  int		$id			Account id to retreive rolesset from
-	 *  @param  string	$role		Required role
+	 *  @param  int          $token    The user's access_token
+	 *  @param  string|array $role     Required role(s)
 	 *	@return boolean
 	 *	@throws \InvalidParameterException
 	 *
@@ -129,7 +129,7 @@ class Guardian
 	 *	return count ($roles) === count (array_intersect (self::user()->getRoles ($id), $roles));
 	 *
 	 */
-	public static function hasRoles ($id, $roles)
+	public static function hasRoles ($token, $roles)
 	{
 		if (is_string ($roles))
 
@@ -139,7 +139,9 @@ class Guardian
 
 			throw new \Cloudoki\InvalidParameterException ('Invalid roles container type');
 
-		$userRoles = User::find ($id)->getRoles ()->pluck ('slug')->all ();
+
+		$userRoles = self::user($token)->getRoles ()->pluck ('slug')->all ();
+
 		$requiredRoles = array_unique ($roles);
 		$hasRoles = count ($requiredRoles) === count (array_intersect ($requiredRoles, $userRoles));
 
