@@ -41,7 +41,7 @@ class Role extends BaseModel
 	 */
 	public function getSlug ()
 	{
-		return $this->name;
+		return $this->slug;
 	}
 
 	/**
@@ -51,7 +51,7 @@ class Role extends BaseModel
 	 */
 	public function setSlug ($slug)
 	{
-		$this->name = $slug;
+		$this->slug = $slug;
 		
 		return $this;
 	}

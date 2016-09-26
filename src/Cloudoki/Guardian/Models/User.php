@@ -22,20 +22,18 @@ class User extends OaStackUser
 	 * Get Rolegroups
 	 * All rolegroups the user has.
 	 *
-	 * @param $display
 	 * @return collection
 	 */
-	public function getRolegroups ($display)
+	public function getRolegroups ()
 	{
 		# Get related rolegroups
-		return $this->rolegroups->schema ($display);
+		return $this->rolegroups;
 	}
 
 	/**
 	 * Get Roles
 	 * All rolegroups' roles (permissions) the user has.
 	 *
-	 * @param $display
 	 * @return collection   A collection of unique roles the user has.
 	 */
 	public function getRoles ()
