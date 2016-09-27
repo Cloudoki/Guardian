@@ -13,6 +13,13 @@
 # Authentication required.
 Route::group(array ('prefix'=> 'guardian'), function ($app)
 {
+	# Role
+	$app->resource (
+		'roles',
+		'\Cloudoki\Guardian\Controllers\RoleViewController',
+		['only' => ['index']]
+	);
+
 	# Rolegroup
 	$app->resource (
 		'rolegroups',

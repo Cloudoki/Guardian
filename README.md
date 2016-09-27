@@ -51,14 +51,24 @@ $ nano config/app.php
 Of course, your backend workers need db access for validation. It goes something like this:
 
 
+### DB Seeds
 
+In order to create the roles required by the Guardian package itself, run the following command from the root path of the app that uses this package.
 
-##Usage
-####Oauth2 Stack
+```
+php artisan db:seed --class="Database\Seeds\GuardianRolesSeeder"
+```
+
+## Usage
+
+#### Oauth2 Stack
+
 Please [dig into](http://blog.cloudoki.com/oauth2-stack/) the Oauth2 Stack documentation before implementing Guardian.
 
-####Access Token
+#### Access Token
+
 The **access token** is requested as `Input` parameter, in respect to the Oauth2 Stack and **MQ alignment**. In a production level API request however, the access token should ALWAYS be placed in the Authorisation header of the request.
 
+#### Management REST Endpoints
 
-
+The Guardian package provides REST API endpoints to view and manage Rolegroups and Roles. Detailed documentation in [this wiki page](https://github.com/Cloudoki/Guardian/wiki/Management-Endpoints).

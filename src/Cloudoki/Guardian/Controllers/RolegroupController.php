@@ -23,7 +23,6 @@ class RolegroupController extends Controller
 	public function index($payload)
 	{
 
-		\Log::info('payload: ' . print_r($payload, true));
 		# Validate
 		$userId = Guardian::userId();
 		$user = User::find((int) $userId);
@@ -53,9 +52,8 @@ class RolegroupController extends Controller
 
 			$list = Rolegroup::orderBy('id')->get();
 
-		# return all (account) users
+		# return rolegroups
 		return $list->map(function ($rolegroup) use ($payload) {
-			// \Log::info('role group at index: ' . print_r($rolegroup, true));
 			return $rolegroup->schema($payload->display);
 		});
 	}
