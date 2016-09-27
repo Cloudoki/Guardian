@@ -1,8 +1,6 @@
 <?php
 namespace Cloudoki\Guardian\Models;
 
-use App\Models\BaseModel;
-
 class Role extends BaseModel
 {
 

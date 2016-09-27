@@ -18,11 +18,26 @@ class GuardianServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		#Oauth2 Migrations
+		#Guardian Migrations
 		$this->publishes(
 		[
 			__DIR__.'/../../migrations/' => database_path ('migrations')
 		], 'migrations');
+
+		# Guardian i18n
+		$this->loadTranslationsFrom (__DIR__.'/../../lang', 'guardian');
+
+		$this->publishes (
+		[
+			__DIR__.'/../../lang' => resource_path ('lang/vendor/guardian')
+		], 'lang');
+
+
+		#Guardian Routes
+		if (! $this->app->routesAreCached ())
+		{
+			require __DIR__.'/../../routes.php';
+		}
 	}
 	
 	
