@@ -26,7 +26,8 @@ class RolegroupViewController extends BaseController
         'id'           =>  'required|integer',
         'name'         =>  'required|min:1|max:250',
         'description'  =>  'required|min:1|max:1000',
-        'roles'        =>  'array|max:100'
+        'roles'        =>  'array|max:100',
+        'roles.*'      =>  'required|integer'
     ];
 
     protected static $postRules =
