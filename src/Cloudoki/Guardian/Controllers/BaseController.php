@@ -87,14 +87,16 @@ class BaseController extends Controller
 	{
 
 		# Add general data
-        $jobload->access_token = app('request')->header('Authorization') ?: null;
+		$authorizationHeader = app('request')->header('Authorization') ?: null;
+		$access_token = explode(' ', $authorizationHeader);
+		$jobload->access_token = array_pop($access_token);
 
-        # Response
-        $response = json_decode( app()->frontqueue->request($job, $jobload));
+		# Response
+		$response = json_decode( app()->frontqueue->request($job, $jobload));
 
-        if (isset ($response->error))
+		if (isset ($response->error))
 
-            return response ($response->error, $response->code);
+			return response ($response->error, $response->code);
 
 		# Frontqueue call
 		return $direct?
