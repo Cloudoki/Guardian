@@ -31,6 +31,17 @@ class Guardian
 		);
 	}
 
+	public static function allowedSuperAdmin ($token = null) {
+
+		if (!$token)
+
+			$token = config ('app.access_token', null);
+
+		$user = self::user($token);
+
+		return $user && $user->isSuperAdmin();
+	}
+
 	/**
 	 *	Check
 	 *	Perform allow function, throw exception if not allowed.
@@ -42,7 +53,19 @@ class Guardian
 	 */
 	public static function check ($accountid = null, $roles = array())
 	{
+
+		if (self::allowedSuperAdmin())
+
+			return;
+
 		if (!self::allowed($accountid, $roles))
+
+			throw new \Cloudoki\InvalidUserException ('not authorized');
+	}
+
+	public static function checkSuperAdmin ($token = null) 
+	{
+		if (!self::allowedSuperAdmin($token))
 
 			throw new \Cloudoki\InvalidUserException ('not authorized');
 	}
@@ -77,7 +100,6 @@ class Guardian
 		if (!$token)
 
 			$token = config ('app.access_token', null);
-
 
 		return Oauth2AccessToken::validated ($token)->first()->user_id;
 	}
@@ -126,7 +148,7 @@ class Guardian
 	 *	@throws \InvalidParameterException
 	 *
 	 *	User vs Account rolesset as array:
-	 *	return count ($roles) === count (array_intersect (self::user()->getRoles ($id), $roles));
+	 *	return count ($roles) === count (array_intersect (self::user()->getRoles (), $roles));
 	 *
 	 */
 	public static function hasRoles ($token, $roles)

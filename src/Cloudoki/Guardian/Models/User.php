@@ -8,6 +8,17 @@ use Cloudoki\OaStack\Models\User as OaStackUser;
  */
 class User extends OaStackUser
 {
+
+	/**
+	 * Check if this user is a super admin
+	 *
+	 * @return hasMany
+	 */
+	public function isSuperAdmin ()
+	{
+		return (bool) $this->super_admin;
+	}
+
 	/**
 	 * Rolegroups relationship
 	 *
