@@ -146,10 +146,12 @@ class RolegroupController extends Controller
 
 			$rolegroup->schemaUpdate((array) $payload);
 
-			# TODO save list of roles (permissions)
-			$roles = Role::find($payload->roles);
 			$rolegroup->roles()->detach();
-			$rolegroup->roles()->attach($roles);
+
+			if (isset($payload->roles)) {
+				$roles = Role::find($payload->roles);
+				$rolegroup->roles()->attach($roles);
+			}
 		} catch(\Exception $e) {
 			DB::rollback();
 			throw $e;

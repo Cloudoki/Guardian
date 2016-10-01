@@ -24,9 +24,9 @@ class RolegroupViewController extends BaseController
     protected static $updateRules =
     [
         'id'           =>  'required|integer',
-        'name'         =>  'required|min:1|max:250',
-        'description'  =>  'required|min:1|max:1000',
-        'roles'        =>  'array|max:100',
+        'name'         =>  'min:1|max:250',
+        'description'  =>  'min:1|max:1000',
+        'roles'        =>  'sometimes|array|max:100',
         'roles.*'      =>  'required|integer'
     ];
 
