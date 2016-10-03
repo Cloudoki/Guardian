@@ -1,7 +1,7 @@
 <?php 
 namespace Cloudoki\Guardian\Models;
 
-use App\Models\BaseModel;
+use Cloudoki\Guardian\Models\BaseModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
@@ -15,6 +15,13 @@ class Rolegroup extends BaseModel
 	use SoftDeletes;
 
 	/**
+	 * The model type.
+	 *
+	 * @const string
+	 */
+	const type = 'rolegroup';
+
+	/**
 	 * Fillables
 	 * define which attributes are mass assignable (for security)
 	 *
@@ -23,17 +30,7 @@ class Rolegroup extends BaseModel
 	protected $fillable = ['name', 'description'];
 	
     protected $dates = ['deleted_at'];
-    
-	/**
-	 * Account relationship
-	 *
-	 * @return BelongsTo
-	 */
-	public function accounts ()
-	{
-		return $this->belongsTo ('Account');
-	}
-	
+    	
 	/**
 	 * Roles relationship
 	 *
@@ -108,6 +105,20 @@ class Rolegroup extends BaseModel
 		$this->limits = $limits;
 		
 		return $this;
+	}
+
+	/**
+	 * Get the roles (permissions) associated
+	 * to this rolegroup.
+	 *
+	 * @param	string	$limits
+	 */
+	public function getRoles ($display)
+	{
+		# Get related roles
+		return $this->roles->map(function ($role) use ($display) {
+			return $role->schema ($display);
+		});
 	}
 
 }

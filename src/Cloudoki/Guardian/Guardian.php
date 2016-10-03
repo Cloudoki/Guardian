@@ -1,6 +1,7 @@
 <?php namespace Cloudoki\Guardian;
 
-use Cloudoki\OaStack\Models\Oauth2AccessToken;
+use Cloudoki\Guardian\Models\User;
+use Cloudoki\Guardian\Models\Oauth2AccessToken;
 
 class Guardian
 {
@@ -26,8 +27,19 @@ class Guardian
 			($accountid && !self::accountRelation ($token, $accountid)) ||
 
 			// Has the user the required roles for the account?
-			($accountid && count($roles) && !self::hasRoles ($accountid, $roles))
+			($accountid && count($roles) && !self::hasRoles ($token, $roles))
 		);
+	}
+
+	public static function allowedSuperAdmin ($token = null) {
+
+		if (!$token)
+
+			$token = config ('app.access_token', null);
+
+		$user = self::user($token);
+
+		return $user && $user->isSuperAdmin();
 	}
 
 	/**
@@ -41,7 +53,19 @@ class Guardian
 	 */
 	public static function check ($accountid = null, $roles = array())
 	{
+
+		if (self::allowedSuperAdmin())
+
+			return;
+
 		if (!self::allowed($accountid, $roles))
+
+			throw new \Cloudoki\InvalidUserException ('not authorized');
+	}
+
+	public static function checkSuperAdmin ($token = null) 
+	{
+		if (!self::allowedSuperAdmin($token))
 
 			throw new \Cloudoki\InvalidUserException ('not authorized');
 	}
@@ -76,7 +100,6 @@ class Guardian
 		if (!$token)
 
 			$token = config ('app.access_token', null);
-
 
 		return Oauth2AccessToken::validated ($token)->first()->user_id;
 	}
@@ -119,23 +142,31 @@ class Guardian
 	 *	Has Roles
 	 *	Make sure the user has all the required roles for the related account.
 	 *
-	 *  @param  int		$id			Account id to retreive rolesset from
-	 *  @param  string	$role		Required role
+	 *  @param  int          $token    The user's access_token
+	 *  @param  string|array $role     Required role(s)
 	 *	@return boolean
 	 *	@throws \InvalidParameterException
 	 *
 	 *	User vs Account rolesset as array:
-	 *	return count ($roles) === count (array_intersect (self::user()->getRoles ($id), $roles));
+	 *	return count ($roles) === count (array_intersect (self::user()->getRoles (), $roles));
 	 *
 	 */
-	public static function hasRoles ($id, $role)
+	public static function hasRoles ($token, $roles)
 	{
-		if(!isset ($role) || !is_string ($role))
+		if (is_string ($roles))
 
-			throw new \Cloudoki\InvalidParameterException ('Invalid roletokens container type');
+			$roles = (array) $roles;
+
+		if(!isset ($roles) || !is_array ($roles))
+
+			throw new \Cloudoki\InvalidParameterException ('Invalid roles container type');
 
 
-		// User vs Account rolesset
-		return in_array ($role, self::user()->getRoles ($id));
+		$userRoles = self::user($token)->getRoles ()->pluck ('slug')->all ();
+
+		$requiredRoles = array_unique ($roles);
+		$hasRoles = count ($requiredRoles) === count (array_intersect ($requiredRoles, $userRoles));
+
+		return $hasRoles;
 	}
 }

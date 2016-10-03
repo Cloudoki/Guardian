@@ -1,0 +1,28 @@
+{
+	"basic" :
+	{
+		"id": "getId",
+		"name": "getName",
+		"description": "getDescription"
+	},
+	"full" :
+	{
+		"id": "getId",
+		"name": "getName",
+		"description": "getDescription",
+		"roles": "getRoles:basic"
+	},
+	"super" :
+	{
+		"id": "getId",
+		"name": "getName",
+		"description": "getDescription",
+		"roles": "getRoles:basic"
+	},
+	"set" : {
+        "protected": {
+	        "name" : "setName",
+		    "description" : "setDescription"
+		}
+    }
+}

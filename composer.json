@@ -1,8 +1,8 @@
 {
     "name": "cloudoki/guardian",
     "description": "Internal Authorisation scopes for Laravel",
-	"homepage": "http://github.com/Cloudoki/Guardian",
-	"keywords": ["authorisation","laravel"],
+    "homepage": "http://github.com/Cloudoki/Guardian",
+    "keywords": ["authorisation","laravel"],
     "license":"MIT",
     "authors": [
         {
@@ -16,12 +16,13 @@
         "cloudoki/except-io-nal": "v0.5.*"
     },
     "autoload": {
-	   "classmap": [
-		    "src/Cloudoki/Guardian/Models",
-			"src/migrations",
-			"src/seeds"
-		],
-		
+       "classmap": [
+            "src/Cloudoki/Guardian/Models",
+            "src/Cloudoki/Guardian/Controllers",
+            "src/migrations",
+            "src/seeds"
+        ],
+        
        "psr-0": {
             "Cloudoki\\Guardian\\": "src/"
         }

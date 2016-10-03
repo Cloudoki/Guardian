@@ -1,0 +1,19 @@
+{
+	"basic" :
+	{
+		"id": "getId",
+		"slug": "getSlug"
+	},
+	"full" :
+	{
+		"id": "getId",
+		"slug": "getSlug",
+		"description": "getDescription"
+	},
+	"set" : {
+		"protected": {
+			"slug" : "setSlug",
+			"description" : "setDescription"
+		}
+	}
+}

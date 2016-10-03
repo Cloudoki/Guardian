@@ -1,8 +1,6 @@
 <?php
 namespace Cloudoki\Guardian\Models;
 
-use App\Models\BaseModel;
-
 class Role extends BaseModel
 {
 
@@ -41,7 +39,7 @@ class Role extends BaseModel
 	 */
 	public function getSlug ()
 	{
-		return $this->name;
+		return $this->slug;
 	}
 
 	/**
@@ -51,7 +49,7 @@ class Role extends BaseModel
 	 */
 	public function setSlug ($slug)
 	{
-		$this->name = $slug;
+		$this->slug = $slug;
 		
 		return $this;
 	}
