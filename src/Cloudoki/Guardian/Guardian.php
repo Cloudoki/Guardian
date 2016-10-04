@@ -20,6 +20,9 @@ class Guardian
 		
 		return !
 		(
+			// Was an account id even provided?
+			empty($accountid) ||
+
 			// Is the acces token valid?
 			!self::validAccess ($token) ||
 
