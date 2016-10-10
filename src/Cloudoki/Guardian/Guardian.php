@@ -20,9 +20,6 @@ class Guardian
 		
 		return !
 		(
-			// Was an account id even provided?
-			empty($accountid) ||
-
 			// Is the acces token valid?
 			!self::validAccess ($token) ||
 
@@ -86,8 +83,13 @@ class Guardian
 
 			$token = config ('app.access_token', null);
 
+		$user = Oauth2AccessToken::validated ($token)->first();
 
-		return Oauth2AccessToken::validated ($token)->first()->user;
+		if (empty($user))
+
+			throw new \Cloudoki\InvalidUserException ('user not found');
+
+		return $user->user;
 	}
 	
 	/**
@@ -104,7 +106,13 @@ class Guardian
 
 			$token = config ('app.access_token', null);
 
-		return Oauth2AccessToken::validated ($token)->first()->user_id;
+		$user = Oauth2AccessToken::validated ($token)->first();
+
+		if (empty($user))
+
+			throw new \Cloudoki\InvalidUserException ('user not found');
+
+		return $user->user_id;
 	}
 
 	/**
@@ -145,8 +153,8 @@ class Guardian
 	 *	Has Roles
 	 *	Make sure the user has all the required roles for the related account.
 	 *
-	 *  @param  int          $token    The user's access_token
-	 *  @param  string|array $role     Required role(s)
+	 *	@param  int          $token    The user's access_token
+	 *	@param  string|array $role     Required role(s)
 	 *	@return boolean
 	 *	@throws \InvalidParameterException
 	 *
