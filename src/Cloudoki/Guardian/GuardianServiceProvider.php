@@ -29,7 +29,7 @@ class GuardianServiceProvider extends ServiceProvider {
 
 		$this->publishes (
 		[
-			__DIR__.'/../../lang' => resource_path ('lang/vendor/guardian')
+			__DIR__.'/../../lang' => base_path ('resources/lang/vendor/guardian')
 		], 'lang');
 
 
